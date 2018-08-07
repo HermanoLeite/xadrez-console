@@ -13,7 +13,11 @@ namespace xadrez {
             colocarPecas();
             terminada = false;
         }
-
+        public void validarPosicaoDeDestino(Posicao origem, Posicao destino) {
+            if(!tab.peca(origem).podeMoverPara(destino)) {
+                throw new TabuleiroException("Posição de destino inválida");
+            }
+        }
         public void validarPosicaoDeOrigem(Posicao origem) {
             if(tab.peca(origem) == null) {
                 throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
