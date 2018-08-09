@@ -14,6 +14,9 @@ namespace tabuleiro {
         public void incrementarQtdMovimentos () {
             this.qtdMovimentos++;
         }
+        public void decrementarQtdMovimentos () {
+            this.qtdMovimentos--;
+        }
         public abstract bool[,] movimentosPossiveis();
 
         public bool existeMovimentosPossiveis () {
