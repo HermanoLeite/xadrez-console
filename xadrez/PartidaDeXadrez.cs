@@ -93,6 +93,32 @@ namespace xadrez {
             }
             return pecaCapturada;
         }
+
+        public bool testaXequemate (Cor cor) {
+            if(!estaEmXeque(cor)) {
+                return false;
+            }
+            foreach (var item in pecasEmJogo(cor))
+            {
+                bool[,] mat = item.movimentosPossiveis();
+                for (int i = 0; i < tab.linhas; i++) {
+                    for (int j = 0; j < tab.colunas; j++) {
+                        if(mat[i,j]) {
+                            var origem = item.posicao;
+                            var destino = new Posicao(i, j);
+                            Peca pecaCapturada = executaMovimento(origem, destino);
+                            var testaXeque = estaEmXeque(cor);
+                            desfazMovimento(origem, destino, pecaCapturada);
+                            if(!estaEmXeque(cor)) {
+                                return false;
+                            } 
+                        }
+                    }                
+                }
+            }
+            return true;
+        }
+
         public void realizaJogada(Posicao origem, Posicao destino) {
             Peca pecaCapturada = executaMovimento(origem, destino);
             if(estaEmXeque(jogadorAtual)) {
@@ -103,8 +129,13 @@ namespace xadrez {
             if(estaEmXeque(adversaria(jogadorAtual))) {
                 xeque = true;
             }
-            turno++;
-            mudaJogador();
+            if(testaXequemate(adversaria(jogadorAtual))) {
+                terminada = true;
+            }
+            else {
+                turno++;
+                mudaJogador();
+            }
         }
         public void desfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada) {
             Peca p = tab.retirarPeca(destino);
